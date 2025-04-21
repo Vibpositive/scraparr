@@ -6,12 +6,22 @@ This module contains helper functions to avoid duplicate code.
 
 import logging
 import requests
+import os
+import urllib3
 
 
 def get(api_url, api_key):
     """Get data from API and Logs errors"""
     try:
-        r = requests.get(api_url, headers={"X-Api-Key": api_key}, timeout=20)
+        ssl_verify = os.environ.get("SSL_VERIFY", "true").lower() == "true"
+
+        if not ssl_verify:
+            logging.warning("SSL verification is disabled. This is not recommended for production use.")
+            with urllib3.warnings.catch_warnings():
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+                r = requests.get(api_url, headers={"X-Api-Key": api_key}, verify=ssl_verify, timeout=20)
+        else:
+            r = requests.get(api_url, headers={"X-Api-Key": api_key}, verify=ssl_verify, timeout=20)
         if r.status_code == 200:
             return r.json()
         if r.status_code == 401:
