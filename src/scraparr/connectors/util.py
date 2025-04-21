@@ -11,7 +11,6 @@ import urllib3
 from scraparr.parser import ConfigParser
 
 config_parser = ConfigParser()
-config_parser.parse_env_config()
 
 requests_verify = True
 ssl_config = config_parser.config.get('ssl')

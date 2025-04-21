@@ -20,7 +20,7 @@ from prometheus_client import make_wsgi_app
 
 from scraparr.middleware import Middleware
 import scraparr.connectors
-from scraparr.parser import parse_env_config
+from scraparr.parser import ConfigParser
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -32,8 +32,8 @@ try:
 except FileNotFoundError:
     logging.error(f"Configuration file not found: {CONFIG_FILE_LOCATION},"
                   " will try to load from environment variables")
-
-    CONFIG = parse_env_config()
+    config_parser = ConfigParser()  # Instantiate ConfigParser correctly
+    CONFIG = config_parser.parse_env_config()  # Call the method on the instance
 
     if not CONFIG:
         logging.error("No configuration found in environment variables.")
