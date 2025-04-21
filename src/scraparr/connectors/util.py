@@ -23,7 +23,7 @@ def get(api_url, api_key):
         if requests_verify is False:
             with urllib3.warnings.catch_warnings(): # type: ignore
                 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-                r = requests.get(api_url, headers={"X-Api-Key": api_key}, verify=True, timeout=20)
+                r = requests.get(api_url, headers={"X-Api-Key": api_key}, verify=requests_verify, timeout=20)
         else:
             r = requests.get(api_url, headers={"X-Api-Key": api_key}, verify=True, timeout=20)
         if r.status_code == 200:
